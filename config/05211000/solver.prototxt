@@ -1,0 +1,16 @@
+train_net: "./pixelate/config/05211000/conv_train.prototxt"
+test_net: "./pixelate/config/05211000/conv_test.prototxt"
+test_iter: 1
+test_interval: 5001
+base_lr: 0.01
+display: 20
+max_iter: 5000
+lr_policy: "step"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+stepsize: 1000
+snapshot: 5000
+snapshot_prefix: "./pixelate/config/05211000/"
+solver_mode: GPU
+type: "SGD"

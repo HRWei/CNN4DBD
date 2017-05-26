@@ -1,0 +1,179 @@
+input: "ImageData1"
+input_shape {
+  dim: 1
+  dim: 1
+  dim: 32
+  dim: 32
+}
+input: "ImageData3"
+input_shape {
+  dim: 1
+  dim: 1
+  dim: 32
+  dim: 32
+}
+layer {
+  name: "Convolution1"
+  type: "Convolution"
+  bottom: "ImageData1"
+  top: "Convolution1"
+  convolution_param {
+    num_output: 8
+    pad: 0
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling1"
+  type: "Pooling"
+  bottom: "Convolution1"
+  top: "Pooling1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Convolution2"
+  type: "Convolution"
+  bottom: "Pooling1"
+  top: "Convolution2"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling2"
+  type: "Pooling"
+  bottom: "Convolution2"
+  top: "Pooling2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Convolution10"
+  type: "Convolution"
+  bottom: "Pooling2"
+  top: "Convolution10"
+  convolution_param {
+    num_output: 100
+    pad: 0
+    kernel_size: 5
+    stride: 5
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Convolution3"
+  type: "Convolution"
+  bottom: "ImageData3"
+  top: "Convolution3"
+  convolution_param {
+    num_output: 8
+    pad: 0
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling3"
+  type: "Pooling"
+  bottom: "Convolution3"
+  top: "Pooling3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Convolution4"
+  type: "Convolution"
+  bottom: "Pooling3"
+  top: "Convolution4"
+  convolution_param {
+    num_output: 20
+    pad: 0
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling4"
+  type: "Pooling"
+  bottom: "Convolution4"
+  top: "Pooling4"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Convolution11"
+  type: "Convolution"
+  bottom: "Pooling4"
+  top: "Convolution11"
+  convolution_param {
+    num_output: 100
+    pad: 0
+    kernel_size: 5
+    stride: 5
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Concat1"
+  type: "Concat"
+  bottom: "Convolution10"
+  bottom: "Convolution11"
+  top: "Concat1"
+}
+layer {
+  name: "ReLU1"
+  type: "ReLU"
+  bottom: "Concat1"
+  top: "Concat1"
+}
+layer {
+  name: "InnerProduct3"
+  type: "InnerProduct"
+  bottom: "Concat1"
+  top: "InnerProduct3"
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "InnerProduct3"
+  top: "prob"
+}

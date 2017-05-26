@@ -1,0 +1,128 @@
+layer {
+  name: "ImageData1"
+  type: "ImageData"
+  top: "Data"
+  top: "Label"
+  transform_param {
+    scale: 0.00390625
+  }
+  image_data_param {
+    source: "./pixelate/config/05211000/train.txt"
+    batch_size: 20
+    is_color: false
+  }
+}
+layer {
+  name: "Flat1"
+  type: "Python"
+  bottom: "Data"
+  top: "Flat1"
+  python_param {
+    module: "ImgFlattenTest.ImgFlatten"
+    layer: "ImgFlatten"
+    param_str: "{'kernel_size':5, 'stride':1}"
+  }
+}
+layer {
+  name: "Convolution1"
+  type: "Convolution"
+  bottom: "Flat1"
+  top: "Convolution1"
+  convolution_param {
+    num_output: 16
+    pad: 0
+    kernel_size: 5
+    stride: 5
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling1"
+  type: "Pooling"
+  bottom: "Convolution1"
+  top: "Pooling1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Flat2"
+  type: "Python"
+  bottom: "Pooling1"
+  top: "Flat2"
+  python_param {
+    module: "ImgFlattenTest.ImgFlatten"
+    layer: "ImgFlatten"
+    param_str: "{'kernel_size':5, 'stride':1}"
+  }
+}
+layer {
+  name: "Convolution2"
+  type: "Convolution"
+  bottom: "Flat2"
+  top: "Convolution2"
+  convolution_param {
+    num_output: 40
+    pad: 0
+    kernel_size: 5
+    stride: 5
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "Pooling2"
+  type: "Pooling"
+  bottom: "Convolution2"
+  top: "Pooling2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "Convolution3"
+  type: "Convolution"
+  bottom: "Pooling2"
+  top: "Convolution3"
+  convolution_param {
+    num_output: 200
+    pad: 0
+    kernel_size: 5
+    stride: 5
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "ReLU1"
+  type: "ReLU"
+  bottom: "Convolution3"
+  top: "Convolution3"
+}
+layer {
+  name: "InnerProduct3"
+  type: "InnerProduct"
+  bottom: "Convolution3"
+  top: "InnerProduct3"
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "SoftmaxWithLoss1"
+  type: "SoftmaxWithLoss"
+  bottom: "InnerProduct3"
+  bottom: "Label"
+  top: "SoftmaxWithLoss1"
+}
